@@ -38,14 +38,10 @@ Every parent package must also be importable (`a/__init__.py`, `a/b/__init__.py`
 Find definitions by **parsing** the source, not by text search. A grep for `def load` also matches comments, strings and `def load_all`.
 
 ```bash
-python - <<'EOF' path/to/file.py
-import ast, sys
-tree = ast.parse(open(sys.argv[1]).read())
-for node in ast.walk(tree):
-    if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-        print(node.lineno, type(node).__name__, node.name)
-EOF
+python3 -c "import ast,sys; [print(n.lineno, type(n).__name__, n.name) for n in ast.walk(ast.parse(open(sys.argv[1]).read())) if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef,ast.ClassDef))]" path/to/file.py
 ```
+
+For JavaScript and other languages there is no parser to hand, so search for the definition forms and open the match: `function name(`, `name(...) {` and `name: function` inside object literals, `name = (...) =>`, and `Namespace.name = function`.
 
 Rules:
 
@@ -93,6 +89,16 @@ Mark these **unverifiable** (not missing) and say why:
 
 For CLI commands the README says are installed (e.g. `mytool run`), check `[project.scripts]` in `pyproject.toml` or `entry_points` in `setup.py`/`setup.cfg`, then confirm the target `module:function` exists.
 
+## 7b. Commands, flags, environment variables, dependencies and counts
+
+The checker tool ignores these, so check each one by hand:
+
+- **CLI flags** (`python pipeline.py --quick`): find the `argparse` `add_argument`, `click.option`, `sys.argv` check or equivalent in that script. A flag the parser doesn't define is `[NOT MET]`; give the real flag as the fix.
+- **Environment variables** (`NEWS_API_KEY`): grep for `os.environ`, `os.getenv`, `process.env` and the variable name. Listed in `.env.example` but never read by code means `[NOT MET]`.
+- **Dependencies and tech-stack claims** ("uses LightGBM", "Plotly dashboard"): the package must be in `requirements.txt` / `pyproject.toml` / `package.json` **and** imported somewhere. Listed but never imported means `[PARTIAL]`; neither means `[NOT MET]`.
+- **Counts and numbers** ("75 tests", "three levels", "12 second cooldown"): count what the code produces **at runtime**, not how many times a pattern appears in the text. Registrations inside a loop multiply: a test registered inside `for x in items` (Python), `items.forEach(...)` (JS) or `@pytest.mark.parametrize` runs once per item, so 4 registrations inside a loop over 5 items are 20 tests, not 4. Find each loop's iteration count before adding up. If the project's test output reports a total (e.g. "RESULT 42 passed"), that total wins. If the count still can't be pinned down (dynamic data, generated tests), list the claim under **Skipped** as unverifiable. Never report `[NOT MET]` based on a grep count alone.
+- **Commands** (`zsh test/run.sh`, `uvicorn api.main:app`): the script or `module:object` must exist. Don't run commands that start servers, install packages or take a long time.
+
 ## 8. Tests and private names
 
 - A function defined **only in tests** (`tests/`, `test_*.py`, `conftest.py`) does not satisfy a README claim about the project's API.
@@ -112,3 +118,12 @@ For CLI commands the README says are installed (e.g. `mytool run`), check `[proj
 | **Unverifiable** | Dynamic or generated; can't be checked statically | Yes, with the reason |
 
 Always include the README line number and, for anything found, the `file:line` of the definition.
+
+**Mapping to report statuses** (the format in `SKILL.md`):
+
+| Classification | Status |
+|---|---|
+| Valid | `[MET]` |
+| Wrong location, Signature mismatch, partly implemented | `[PARTIAL]` |
+| Missing | `[NOT MET]` |
+| Expected missing, External, Example / placeholder, Unverifiable | no status: list under **Skipped** with the reason |

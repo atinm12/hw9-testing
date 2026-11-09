@@ -3,3 +3,10 @@ __pycache__/
 *.pyc
 .env
 .DS_Store
+
+# Per-session project copies; the demo scripts recreate them and each run's
+# *.integrity.txt records the before/after comparison.
+demo/run5/**/targets/
+demo/run6/targets/
+demo/run7/targets/
+demo/hw7/run*/*-target/

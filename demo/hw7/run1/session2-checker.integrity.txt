@@ -1,0 +1,1 @@
+No files modified: target is byte-identical to the original HW7 project (excluding the installed .claude/skills).

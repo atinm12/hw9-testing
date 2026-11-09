@@ -1,0 +1,9 @@
+P1	yes	Are the docs in this project still in sync with the code?
+P2	yes	I'm about to tag v1.0. Is anything in the project documentation out of date with the implementation?
+P3	yes	Someone filed an issue saying the quickstart instructions don't work. Can you figure out what's wrong with them?
+P4	yes	Double-check the README before I open this PR.
+P5	yes	Fact-check README.md against the source.
+N1	no	What does pipeline.py do? Answer in two sentences.
+N2	no	Write a README for the api/ folder.
+N3	no	Fix the typos and grammar in README.md.
+N4	no	Add a docstring to get_vs_similar_teams in features/matchup_features.py.

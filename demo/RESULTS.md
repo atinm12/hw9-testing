@@ -1,5 +1,7 @@
 # Demonstration results
 
+> **Note:** Runs 1–5 below tested earlier versions of the skill on a copy of the `nba-predictor` project. The final skill (`MET` / `PARTIAL` / `NOT MET` format) is the one in [`../verify-readme-skill/`](../verify-readme-skill/), tested in Runs 6–7 at the end of this file and demonstrated on my HW7 project in [`../demonstration.md`](../demonstration.md).
+
 Target: a copy of the `nba-predictor` project with errors planted in its README. Agent: Claude Code CLI 2.1.148 running headless (`claude -p`), with the `verify-readme-claims` MCP server, no skill installed. Model: `claude-sonnet-4-6` (the CLI default). Each run's `command.sh` reproduces it.
 
 Prompt for both runs:
@@ -118,3 +120,52 @@ Remaining issues with the new skill:
 - One preamble line ("I now have all the information…") before the report, against the "nothing before it" rule. It also double-wrapped backticks in the *README says* column.
 - Still missed `WEATHER_API_KEY` and LightGBM, and wrote "Not checked: None" anyway. Env vars and dependencies aren't in the guidelines yet.
 - The guidelines' heredoc AST snippet was blocked again by the `Bash(python3:*)` rule.
+
+## Run 5: trigger accuracy with a decoy skill, plus full execution
+
+Current `SKILL.md` (Run 4 version) installed next to a decoy `readme-writer` skill that writes READMEs. There were 9 prompts, none naming the skill: 5 that should trigger the checker and 4 that shouldn't (unrelated question, README-writing request for the decoy, proofreading request, code edit). Each case ran in a fresh target copy with a 3-turn cap; the trigger decision happens on the first turn. The same 9 cases were rerun with the old "Checks things in the repo." skill as a baseline. Scripts: [run5/run_case.sh](run5/run_case.sh), [run5/grade.py](run5/grade.py).
+
+A **misfire** is any of: no trigger on a positive prompt, a trigger on a negative prompt, or a call to a skill name that doesn't exist.
+
+| Case | Prompt | Expected | New skill | Old skill |
+|---|---|---|---|---|
+| P1 | Are the docs in this project still in sync with the code? | trigger | ✅ `verify-readme-skill` | ✅ `verify-readme-skill` |
+| P2 | I'm about to tag v1.0. Is anything in the project documentation out of date with the implementation? | trigger | ✅ `verify-readme-skill` | ❌ `verify-readme-claims`, `verify-readme-skill` |
+| P3 | Someone filed an issue saying the quickstart instructions don't work. Can you figure out what's wrong with them? | trigger | ✅ `verify-readme-skill` | ❌ none |
+| P4 | Double-check the README before I open this PR. | trigger | ✅ `verify-readme-skill` | ✅ `verify-readme-skill` |
+| P5 | Fact-check README.md against the source. | trigger | ✅ `verify-readme-skill` | ✅ `verify-readme-skill` |
+| N1 | What does pipeline.py do? Answer in two sentences. | no trigger | ✅ none | ✅ none |
+| N2 | Write a README for the api/ folder. | no trigger | ✅ `readme-writer` | ✅ `readme-writer` |
+| N3 | Fix the typos and grammar in README.md. | no trigger | ✅ none | ✅ none |
+| N4 | Add a docstring to get_vs_similar_teams in features/matchup_features.py. | no trigger | ✅ none | ✅ none |
+| | **Misfires** | | **0 / 9** | **2 / 9** |
+
+The old skill missed P3 (the quickstart issue, which doesn't mention README or docs) and on P2 first called `verify-readme-claims`, a skill that doesn't exist (the MCP server's name). The new description fixed both, and stayed out of the decoy's and the proofreader's requests.
+
+### Full execution (new skill, prompt P1, no turn cap)
+
+- **Discovery and execution:** `Skill(verify-readme-skill)` → read README and guidelines → `ToolSearch` → **`verify_readme_claims` MCP tool called** (the first time any skill run used it) → read source files → report. 16 turns, 162s, $0.29. One read-only Bash call was blocked (the heredoc AST snippet again).
+- **Format:** the template was followed exactly, with no preamble or closing text this time. The doubled backticks in *README says* remain.
+- **No modifications:** workspace fingerprint 168 → 168 identical, and the run's target matches its pristine source byte-for-byte ([run5/full/file-integrity.txt](run5/full/file-integrity.txt)). No Edit/Write calls.
+- **Accuracy:** 3 of the 6 planted errors: `cache_player_logs`/`data/cache.py` (split over two rows), `get_streak_stats`, and the `get_vs_similar_teams` signature. Run 4 also caught `--fast`; this run didn't check it, so flag checking isn't reliable yet. `WEATHER_API_KEY` and LightGBM were missed again, still with "Not checked: None".
+
+**Conclusion:** the new description fixes discovery (0 misfires vs 2 for the old skill, with a decoy present), and execution follows the template without editing files. Detection of CLI flags, env vars and dependencies is still inconsistent, which is a guidelines gap, not a triggering one.
+
+## Runs 6–7: trigger test of the final description
+
+The same 9-prompt decoy test as Run 5, run with the description from [`../iteration.md`](../iteration.md) (Run 6), then with that sentence plus extra trigger situations (Run 7, the final version). Grades: [run6/grades.md](run6/grades.md), [run7/grades.md](run7/grades.md).
+
+| Case | Prompt | Old "Checks things in the repo." (Run 5 baseline) | Run 6: short description | Run 7: final description |
+|---|---|---|---|---|
+| P1 | Are the docs in this project still in sync with the code? | ✅ `verify-readme-skill` | ✅ `verify-readme-skill` | ✅ `verify-readme-skill` |
+| P2 | I'm about to tag v1.0. Is anything in the project documentation out of date with the implementation? | ❌ `verify-readme-claims`, `verify-readme-skill` | ✅ `verify-readme-skill` | ✅ `verify-readme-skill` |
+| P3 | Someone filed an issue saying the quickstart instructions don't work. Can you figure out what's wrong with them? | ❌ none | ❌ none | ✅ `verify-readme-skill` |
+| P4 | Double-check the README before I open this PR. | ✅ `verify-readme-skill` | ✅ `verify-readme-skill` | ✅ `verify-readme-skill` |
+| P5 | Fact-check README.md against the source. | ✅ `verify-readme-skill` | ✅ `verify-readme-skill` | ✅ `verify-readme-skill` |
+| N1 | What does pipeline.py do? Answer in two sentences. | ✅ none | ✅ none | ✅ none |
+| N2 | Write a README for the api/ folder. | ✅ `readme-writer` | ✅ `readme-writer` | ✅ `readme-writer` |
+| N3 | Fix the typos and grammar in README.md. | ✅ none | ✅ none | ✅ none |
+| N4 | Add a docstring to get_vs_similar_teams in features/matchup_features.py. | ✅ none | ✅ none | ✅ none |
+| | **Misfires** | **2 / 9** | **1 / 9** | **0 / 9** |
+
+The short description fixed the wrong-skill-name problem but, like the old one, didn't trigger on P3 ("the quickstart instructions don't work"), which never says "README". Adding "when the docs may be out of date or out of sync with the code, or when setup or quickstart instructions reportedly don't work" fixed it without triggering on the README-writing (decoy) or grammar prompts.

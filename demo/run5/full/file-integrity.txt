@@ -1,0 +1,3 @@
+compared 168 -> 168 files
+  no differences: every file is byte-identical
+E1 target identical to pristine source (excluding installed .claude/skills)
