@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "verify-readme-claims": {
+      "command": "/Users/atinmathur/Downloads/114HW8/.venv/bin/python",
+      "args": ["/Users/atinmathur/Downloads/114HW8/server.py"],
+      "env": { "LOG_LEVEL": "INFO" }
+    }
+  }
+}

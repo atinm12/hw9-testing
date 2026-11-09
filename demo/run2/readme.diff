@@ -1,0 +1,28 @@
+--- nba-predictor-drifted/README.md	2026-11-08 19:07:54
++++ nba-predictor-drifted-v2/README.md	2026-11-08 19:10:14
+@@ -40,6 +40,8 @@
+ pip install -r requirements.txt
+ ```
+ 
++Player game logs are cached locally by `cache_player_logs()` in `data/cache.py`, so repeat runs skip the NBA API.
++
+ ### 2. Configure API keys (optional but recommended)
+ 
+ ```bash
+@@ -92,7 +94,6 @@
+ │   ├── matchup_features.py   # Head-to-head + similar team history
+ │   ├── game_features.py      # Rest, travel, altitude, back-to-back
+ │   ├── news_features.py      # NLP sentiment wrapper
+-│   ├── injury_features.py    # Injury report parsing
+ │   └── build_features.py     # Master feature vector builder
+ ├── models/
+ │   ├── train.py              # XGBoost training (one model per stat)
+@@ -125,7 +126,7 @@
+ python models/evaluate.py
+ ```
+ 
+-This compares predictions vs actual outcomes and vs Vegas prop lines using `compare_to_vegas()` in `models/predict.py`. Beating Vegas MAE on points is a meaningful benchmark.
++This compares predictions vs actual outcomes and vs Vegas prop lines using `compare_vs_vegas()` in `models/evaluate.py`. Beating Vegas MAE on points is a meaningful benchmark.
+ 
+ ## Tech Stack
+ 

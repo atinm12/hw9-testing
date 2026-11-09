@@ -1,0 +1,2 @@
+compared 142 -> 142 files
+  no differences: every file is byte-identical

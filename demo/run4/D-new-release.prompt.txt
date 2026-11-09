@@ -1,0 +1,1 @@
+I'm about to tag v1.0. Is there anything in the project documentation that no longer matches the implementation?
