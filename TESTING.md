@@ -157,4 +157,4 @@ A green run means the rules I wrote down still hold. It doesn't mean the tool is
 
 ## How I used AI
 
-_(to be written)_
+I used AI for brainstorm by iterating through my own thoughts. I also used it to optimize the prompts that i am giving claude code so that it optimizes the output. Then I used AI to ensure all parts of the assignment were met.
