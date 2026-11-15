@@ -1,0 +1,49 @@
+M1 flip extension check: 12 failed, 41 passed in 0.03s
+    tests/test_claims.py::test_looks_like_file_accepts_known_extensions_case_insensitively[server.py]
+    tests/test_claims.py::test_looks_like_file_accepts_known_extensions_case_insensitively[src/App.TSX]
+    tests/test_claims.py::test_looks_like_file_accepts_known_extensions_case_insensitively[requirements.txt]
+    tests/test_claims.py::test_looks_like_file_accepts_known_extensions_case_insensitively[app.py/]
+M2 drop lower(): 1 failed, 52 passed in 0.03s
+    tests/test_claims.py::test_looks_like_file_accepts_known_extensions_case_insensitively[src/App.TSX]
+M3 allow absolute paths: 1 failed, 52 passed in 0.03s
+    tests/test_claims.py::test_is_path_candidate_rejects_urls_anchors_and_absolute_paths[/etc/hosts]
+M4 disable dedup: 1 failed, 52 passed in 0.03s
+    tests/test_claims.py::test_extract_claims_reports_each_name_once_at_its_first_line
+M5 invert note condition: 3 failed, 50 passed in 0.03s
+    tests/test_claims.py::test_resolve_function_exact_match_has_no_note
+    tests/test_claims.py::test_resolve_function_falls_back_to_class_method_before_bare_name
+    tests/test_claims.py::test_resolve_function_falls_back_to_bare_name
+M6 keep shell comments: 1 failed, 52 passed in 0.03s
+    tests/test_claims.py::test_extract_claims_in_code_fence_takes_files_and_defs_but_not_comments
+M7 off-by-one ./ strip: 1 failed, 52 passed in 0.03s
+    tests/test_claims.py::test_extract_claims_markdown_links_strip_dot_slash_and_anchor_and_skip_remote
+M8 ignored-dir check uses last segment: 1 failed, 52 passed in 0.03s
+    tests/test_claims.py::test_extract_claims_ignores_paths_inside_ignored_directories
+M9 file check ignores kind: 1 failed, 52 passed in 0.03s
+    tests/test_claims.py::test_resolve_path_missing_file_and_wrong_kind_are_not_found
+M10 claim builtins: 1 failed, 52 passed in 0.03s
+    tests/test_claims.py::test_extract_claims_reads_inline_code_spans
+M11 drop decorator skip: 53 passed in 0.03s
+M12 line numbers from 0: 6 failed, 47 passed in 0.04s
+    tests/test_claims.py::test_extract_claims_reads_inline_code_spans
+    tests/test_claims.py::test_extract_claims_in_code_fence_takes_files_and_defs_but_not_comments
+    tests/test_claims.py::test_extract_claims_reports_each_name_once_at_its_first_line
+    tests/test_claims.py::test_extract_claims_markdown_links_strip_dot_slash_and_anchor_and_skip_remote
+M13 drop bare-name fallback: 1 failed, 52 passed in 0.05s
+    tests/test_claims.py::test_resolve_function_falls_back_to_bare_name
+M14 drop . and .. guard: 2 failed, 51 passed in 0.04s
+    tests/test_claims.py::test_looks_like_file_rejects_versions_dirs_unknown_extensions_and_empty[..]
+    tests/test_claims.py::test_looks_like_file_rejects_versions_dirs_unknown_extensions_and_empty[../]
+M15 drop rstrip in _looks_like_file: 1 failed, 52 passed in 0.05s
+    tests/test_claims.py::test_looks_like_file_accepts_known_extensions_case_insensitively[app.py/]
+M16 Class.method needs 3 parts: 53 passed in 0.03s
+M17 fence toggles only on open: 1 failed, 52 passed in 0.04s
+    tests/test_claims.py::test_extract_claims_in_code_fence_takes_files_and_defs_but_not_comments
+M18 skip bare files list: 3 failed, 50 passed in 0.03s
+    tests/test_claims.py::test_looks_like_file_accepts_bare_names_and_dotfiles[Makefile]
+    tests/test_claims.py::test_looks_like_file_accepts_bare_names_and_dotfiles[LICENSE]
+    tests/test_claims.py::test_looks_like_file_accepts_bare_names_and_dotfiles[docs/Dockerfile]
+M19 directory claims become files: 1 failed, 52 passed in 0.03s
+    tests/test_claims.py::test_extract_claims_reads_inline_code_spans
+M20 drop strict guard on links: 1 failed, 52 passed in 0.03s
+    tests/test_claims.py::test_extract_claims_markdown_links_strip_dot_slash_and_anchor_and_skip_remote

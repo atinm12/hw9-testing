@@ -1,0 +1,116 @@
+
+===== claims.py:195
+- ext = name.rsplit(".", 1)[-1].lower()
++ ext = name.rsplit(".", 1)[-1]
+......F..............................................                    [100%]
+=================================== FAILURES ===================================
+_ test_looks_like_file_accepts_known_extensions_case_insensitively[src/App.TSX] _
+tests/test_claims.py:33: in test_looks_like_file_accepts_known_extensions_case_insensitively
+    assert _looks_like_file(token) is True
+E   AssertionError: assert False is True
+E    +  where False = _looks_like_file('src/App.TSX')
+=========================== short test summary info ============================
+FAILED tests/test_claims.py::test_looks_like_file_accepts_known_extensions_case_insensitively[src/App.TSX]
+1 failed, 52 passed in 0.04s
+
+
+===== claims.py:201
+- token.startswith(("#", "mailto:", "@", "$", "~", "/"))
++ token.startswith(("#", "mailto:", "@", "$", "~"))
+............................F........................                    [100%]
+=================================== FAILURES ===================================
+__ test_is_path_candidate_rejects_urls_anchors_and_absolute_paths[/etc/hosts] __
+tests/test_claims.py:55: in test_is_path_candidate_rejects_urls_anchors_and_absolute_paths
+    assert _is_path_candidate(token) is False
+E   AssertionError: assert True is False
+E    +  where True = _is_path_candidate('/etc/hosts')
+=========================== short test summary info ============================
+FAILED tests/test_claims.py::test_is_path_candidate_rejects_urls_anchors_and_absolute_paths[/etc/hosts]
+1 failed, 52 passed in 0.04s
+
+
+===== claims.py:214
+- if key not in seen:
++ if True:
+......................................F..............                    [100%]
+=================================== FAILURES ===================================
+_________ test_extract_claims_reports_each_name_once_at_its_first_line _________
+tests/test_claims.py:103: in test_extract_claims_reports_each_name_once_at_its_first_line
+    assert triples(extract_claims(readme)) == [("file", "app.py", 1)]
+E   AssertionError: assert [('file', 'ap... 'app.py', 3)] == [('file', 'app.py', 1)]
+E     
+E     Left contains 2 more items, first extra item: ('file', 'app.py', 2)
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED tests/test_claims.py::test_extract_claims_reports_each_name_once_at_its_first_line
+1 failed, 52 passed in 0.07s
+
+
+===== claims.py:222
+- token = token[2:]
++ token = token[1:]
+.......................................F.............                    [100%]
+=================================== FAILURES ===================================
+_ test_extract_claims_markdown_links_strip_dot_slash_and_anchor_and_skip_remote _
+tests/test_claims.py:117: in test_extract_claims_markdown_links_strip_dot_slash_and_anchor_and_skip_remote
+    assert triples(extract_claims(readme)) == [
+E   AssertionError: assert [('file', 'do...rc/utils', 6)] == [('file', 'do...rc/utils', 6)]
+E     
+E     At index 1 diff: ('file', 'src/utils', 6) != ('file', 'README.md', 2)
+E     Right contains one more item: ('file', 'src/utils', 6)
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED tests/test_claims.py::test_extract_claims_markdown_links_strip_dot_slash_and_anchor_and_skip_remote
+1 failed, 52 passed in 0.04s
+
+
+===== claims.py:294
+- if rel in pool or (claim.kind == "file" and candidate.is_file()) or (
++ if rel in pool or (candidate.is_file()) or (
+...................................................F.                    [100%]
+=================================== FAILURES ===================================
+_________ test_resolve_path_missing_file_and_wrong_kind_are_not_found __________
+tests/test_claims.py:217: in test_resolve_path_missing_file_and_wrong_kind_are_not_found
+    assert wrong_kind.found is False
+E   AssertionError: assert True is False
+E    +  where True = Claim(kind='directory', name='src/app.py', line=2, found=True, locations=['src/app.py'], note='').found
+=========================== short test summary info ============================
+FAILED tests/test_claims.py::test_resolve_path_missing_file_and_wrong_kind_are_not_found
+1 failed, 52 passed in 0.04s
+
+
+===== claims.py:235
+- in_fence = not in_fence
++ in_fence = True
+.....................................F...............                    [100%]
+=================================== FAILURES ===================================
+___ test_extract_claims_in_code_fence_takes_files_and_defs_but_not_comments ____
+tests/test_claims.py:94: in test_extract_claims_in_code_fence_takes_files_and_defs_but_not_comments
+    assert triples(extract_claims(readme)) == [
+E   AssertionError: assert [('file', 'se... 'helper', 4)] == [('file', 'se...un_after', 7)]
+E     
+E     Right contains one more item: ('function', 'run_after', 7)
+E     Use -v to get more diff
+------------------------------ Captured log call -------------------------------
+WARNING  verify-readme-claims:claims.py:275 README has an unclosed code fence; the rest was parsed as code
+=========================== short test summary info ============================
+FAILED tests/test_claims.py::test_extract_claims_in_code_fence_takes_files_and_defs_but_not_comments
+1 failed, 52 passed in 0.10s
+
+
+===== claims.py:229
+- elif _looks_like_file(token) or (not strict and "/" in token):
++ elif _looks_like_file(token):
+.......................................F.............                    [100%]
+=================================== FAILURES ===================================
+_ test_extract_claims_markdown_links_strip_dot_slash_and_anchor_and_skip_remote _
+tests/test_claims.py:117: in test_extract_claims_markdown_links_strip_dot_slash_and_anchor_and_skip_remote
+    assert triples(extract_claims(readme)) == [
+E   AssertionError: assert [('file', 'do...EADME.md', 2)] == [('file', 'do...rc/utils', 6)]
+E     
+E     Right contains one more item: ('file', 'src/utils', 6)
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED tests/test_claims.py::test_extract_claims_markdown_links_strip_dot_slash_and_anchor_and_skip_remote
+1 failed, 52 passed in 0.15s
+
