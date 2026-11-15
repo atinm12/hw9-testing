@@ -41,7 +41,7 @@ This was a pure move with no rewriting and no bug fixes. I checked that in three
 
 ## 2. What I tested, and what I deliberately didn't
 
-`tests/test_claims.py`: 20 test functions, 53 cases after parametrization, plus the 5 pre-existing `test_server.py` tests, for **58 passing**. They were committed by themselves in `e35a8bb`, before any further code changes.
+`tests/test_claims.py`: 21 test functions, 53 cases after parametrization, plus the 5 pre-existing `test_server.py` tests, for **58 passing**. They were committed by themselves in `e35a8bb`, before any further code changes.
 
 | Function | What could plausibly go wrong (what the tests target) |
 |---|---|
