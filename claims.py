@@ -192,7 +192,7 @@ def _looks_like_file(token: str) -> bool:
     if re.fullmatch(r"\.[\w.-]+", name):  # dotfiles such as .gitignore, .env.example
         return True
     if "." in name:
-        ext = name.rsplit(".", 1)[-1].lower()
+        ext = name.rsplit(".", 1)[-1]
         return ext in FILE_EXTENSIONS
     return False
 
