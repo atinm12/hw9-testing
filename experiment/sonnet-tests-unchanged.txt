@@ -1,0 +1,5 @@
+git diff 69f6717 --stat -- tests test_server.py pytest.ini  (69f6717 = last commit that touched the tests)
+(empty = tests identical)
+
+git status --short:
+ M claims.py

@@ -1,0 +1,13 @@
+diff --git a/claims.py b/claims.py
+index ce0e727..2c5d4cf 100644
+--- a/claims.py
++++ b/claims.py
+@@ -193,7 +193,7 @@ def _looks_like_file(token: str) -> bool:
+         return True
+     if "." in name:
+         ext = name.rsplit(".", 1)[-1]
+-        return ext in FILE_EXTENSIONS
++        return ext.lower() in FILE_EXTENSIONS
+     return False
+ 
+ 
