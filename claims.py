@@ -198,7 +198,7 @@ def _looks_like_file(token: str) -> bool:
 
 
 def _is_path_candidate(token: str) -> bool:
-    if not token or "://" in token or token.startswith(("#", "mailto:", "@", "$", "~")):
+    if not token or "://" in token or token.startswith(("#", "mailto:", "@", "$", "~", "/")):
         return False
     if any(ch in token for ch in " {}<>|*?\"'=,;()[]\\"):
         return False
