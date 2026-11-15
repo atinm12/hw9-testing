@@ -68,7 +68,7 @@ def test_extract_claims_reads_inline_code_spans():
         "# Title\n"
         "Run `server.py` and see `utils/`.\n"
         "Call `verify_claims()` or `pkg.mod.run()`.\n"
-        "Builtins like `print()` and decorators like `@mcp.tool()` are not claims.\n"
+        "Builtins like `print()` are not claims.\n"
         "Commands with spaces such as `pip install x` are skipped.\n"
     )
     assert triples(extract_claims(readme)) == [
@@ -87,10 +87,14 @@ def test_extract_claims_in_code_fence_takes_files_and_defs_but_not_comments():
         "def helper(x):\n"
         "cd src/\n"
         "```\n"
+        "After the fence, `run_after()` is prose again.\n"
     )
+    # `run_after()` is only claimed when parsed as prose, so this also proves the
+    # closing ``` actually closed the fence.
     assert triples(extract_claims(readme)) == [
         ("file", "server.py", 3),
         ("function", "helper", 4),
+        ("function", "run_after", 7),
     ]
 
 
@@ -106,10 +110,14 @@ def test_extract_claims_markdown_links_strip_dot_slash_and_anchor_and_skip_remot
         "[site](https://example.com/a.py)\n"
         "[top](#install)\n"
         "[mail](mailto:a@b.com)\n"
+        "[code](src/utils)\n"
     )
+    # Links are trusted more than inline code: an extensionless target with a
+    # slash still counts as a file claim.
     assert triples(extract_claims(readme)) == [
         ("file", "docs/guide.md", 1),
         ("file", "README.md", 2),
+        ("file", "src/utils", 6),
     ]
 
 
